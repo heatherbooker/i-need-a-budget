@@ -15,7 +15,12 @@ conn.close()
 # Create schema
 conn = psycopg2.connect(dbname='test_budget')
 cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS expenses (date DATE NOT NULL DEFAULT CURRENT_DATE)")
+
+sharedcolumns = "id serial PRIMARY KEY, date DATE NOT NULL DEFAULT CURRENT_DATE, amount NUMERIC(2) NOT NULL, category TEXT NOT NULL"
+createtablesql = "CREATE TABLE IF NOT EXISTS {name} ({cols})".format(name='{name}', cols=sharedcolumns + '{cols}')
+
+cur.execute(createtablesql.format(name='expenses', cols=', subcategory TEXT, details TEXT'))
+cur.execute(createtablesql.format(name='income', cols=''))
 
 conn.commit()
 conn.close()
