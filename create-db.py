@@ -1,50 +1,23 @@
-import psycopg2 as psy
+import psycopg2
 
-conn = psy.connect('dbname=test_budget')
+# TALK TO DA DB
+conn = psycopg2.connect(dbname='postgres')
+conn.autocommit = True # Commit the changes we make
 cur = conn.cursor()
 
-operation = raw_input('create (c) or delete (d)?')
+# create or remove?
+while True:
+    create_or_drop = raw_input('create db or drop db?')
+    if create_or_drop in ('c', 'create'):
+        cur.execute('CREATE DATABASE IF NOT EXISTS test_budget')
+        conn.autocommit = False
+        cur.execute("CREATE TABLE IF NOT EXISTS expenses (date DATE NOT NULL DEFAULT 'today')")
+        break
+    elif create_or_drop in ('d', 'drop'):
+        cur.execute('DROP DATABASE test_budget')
+        break
+    else:
+        print 'nah son, try "create" or "drop"'
 
-if operation == 'c':
-  print('creating')
-  cur.execute(
-    """
-    CREATE TABLE IF NOT EXISTS expenses (
-      id SERIAL PRIMARY KEY,
-      date DATE NOT NULL DEFAULT 'today',
-      amount INT NOT NULL,
-      category VARCHAR NOT NULL,
-      subcategory VARCHAR,
-      details VARCHAR
-    )
-    """
-  )
-  cur.execute(
-    """
-    CREATE TABLE IF NOT EXISTS income (
-      id SERIAL PRIMARY KEY,
-      date DATE NOT NULL DEFAULT 'today',
-      amount INT NOT NULL,
-      category VARCHAR(60) NOT NULL DEFAULT 'salary',
-      subcategory VARCHAR(60) DEFAULT NULL,
-      details VARCHAR(140) DEFAULT NULL
-    )
-    """
-  )
-  conn.commit()
-elif operation == 'd':
-  print('dropping')
-  cur.execute(
-    """
-    DROP TABLE IF EXISTS expenses
-    """,
-    """
-    DROP TABLE IF EXISTS income
-    """
-  )
-  conn.commit()
-else:
-  print('input not recognized, you typed:')
-  print(operation)
-
+conn.close()
 
