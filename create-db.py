@@ -1,12 +1,18 @@
-import psycopg2
+from psycopg2 import pool
 
 # TALK TO DA DB
-conn = psycopg2.connect(dbname='postgres')
-conn.autocommit = True # Must be in autocommit to create db
-autocommitcur = conn.cursor()
+db = pool.SimpleConnectionPool(1, 10, dbname='postgres')
 
-autocommitcur.execute('DROP DATABASE IF EXISTS test_budget')
-autocommitcur.execute('CREATE DATABASE test_budget')
+conn = db.getconn()
+conn.autocommit = True # Must be in autocommit to create db
+cur = conn.cursor()
+
+cur.execute('DROP DATABASE IF EXISTS test_budget')
+cur.execute('CREATE DATABASE test_budget')
+
+db.putconn(conn)
+
+conn = db.getconn()
 conn.autocommit = False
 
 cur = conn.cursor()
