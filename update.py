@@ -2,7 +2,7 @@ import calendar
 from datetime import date
 import psycopg2
 
-conn = psycopg2.connect('dbname=budget')
+conn = psycopg2.connect('dbname=testbudget')
 cur = conn.cursor()
 
 year = date.today().year
@@ -23,3 +23,4 @@ bills = cur.fetchall()
 print('Bills for {0}-{1}:'.format(year, month))
 print(bills)
 
+cur.execute("INSERT INTO expenses (date, amount, category, subcategory) VALUES ('{}-{}-01', 725, 'bills', 'rent')".format(year, month))
