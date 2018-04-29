@@ -21,7 +21,7 @@ conn.close()
 
 
 # SHOW ME THE MONEY (lol u so funny)
-colors=cm.tab20b(np.linspace(0, 1, len(categories)))
+colors = cm.tab20b(np.linspace(0, 1, len(categories)))
 plt.pie(amounts, labels=categories, colors=colors)
 plt.axis('equal')
 plt.show()
