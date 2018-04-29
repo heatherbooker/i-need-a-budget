@@ -1,8 +1,8 @@
-import psycopg2
+import psycopg2 as psy
 
 
 # Create db (must be in autocommit mode)
-conn = psycopg2.connect(dbname='postgres')
+conn = psy.connect(dbname='postgres')
 conn.autocommit = True
 cur = conn.cursor()
 
@@ -13,14 +13,22 @@ conn.close()
 
 
 # Create schema
-conn = psycopg2.connect(dbname='test_budget')
+conn = psy.connect(dbname='test_budget')
 cur = conn.cursor()
 
-sharedcolumns = "id serial PRIMARY KEY, date DATE NOT NULL DEFAULT CURRENT_DATE, amount NUMERIC(2) NOT NULL, category TEXT NOT NULL"
-createtablesql = "CREATE TABLE IF NOT EXISTS {name} ({cols})".format(name='{name}', cols=sharedcolumns + '{cols}')
+createtablesql = """
+CREATE TABLE IF NOT EXISTS {name} (
+  id SERIAL PRIMARY KEY,
+  date DATE NOT NULL DEFAULT CURRENT_DATE,
+  amount NUMERIC(2) NOT NULL,
+  category VARCHAR NOT NULL,
+  subcategory VARCHAR,
+  details VARCHAR
+)
+"""
 
-cur.execute(createtablesql.format(name='expenses', cols=', subcategory TEXT, details TEXT'))
-cur.execute(createtablesql.format(name='income', cols=''))
+cur.execute(createtablesql.format(name='expenses'))
+cur.execute(createtablesql.format(name='income'))
 
 conn.commit()
 conn.close()
