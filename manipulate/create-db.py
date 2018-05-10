@@ -20,7 +20,7 @@ createtablesql = """
 CREATE TABLE IF NOT EXISTS {name} (
   id SERIAL PRIMARY KEY,
   date DATE NOT NULL DEFAULT CURRENT_DATE,
-  amount NUMERIC(2) NOT NULL,
+  amount NUMERIC(10, 2) NOT NULL,
   category VARCHAR NOT NULL,
   subcategory VARCHAR,
   details VARCHAR

@@ -1,26 +1,72 @@
 import calendar
 from datetime import date
-import psycopg2
+import psycopg2 as psy
+import sys
 
-conn = psycopg2.connect('dbname=testbudget')
+which_db = 'test_budget'
+if len(sys.argv) > 1 and sys.argv[1] == '--fo-real':
+  which_db = 'budget'
+
+print('Using db: `{}`; use arg `--fo-real` to use `budget`.'.format(which_db))
+conn = psy.connect('dbname={}'.format(which_db))
 cur = conn.cursor()
 
 year = date.today().year
-month = input('What month (1-12) in {0} do you want to update recurring expenses for?'.format(year))
-last_day = calendar.monthrange(2018, int(month))[1]
 
-recurring = {
-  'category': ('subcat', 'subcategory', 'subcategorino', 'lastbeans'),
-  'othercategory': ('typeofthing'),
-  'thirdcat': ('abcdef'),
-  'somecateg': ('moreotherthing')
+month = 0
+while month not in range(1, 12):
+    month = int(input('What month (1-12) in {0} do you want to update categories expenses for? (current month: {1})'.format(year, date.today().month)))
+
+last_day = calendar.monthrange(year, month)[1]
+
+# TODO: put this in a separate file, not tracked by git
+categories = {
+  'category': ('subcat', 'subcat2', 'subcat3', 'subcat4'),
+  'othercategory': ('subcat5',)
 }
-categories = tuple(recurring.keys())
+data = {
+  'subcat': {
+    'amount': 12,
+    'day': 1
+  },
+  'subcat2': {
+    'amount': 22,
+    'day': 19
+  },
+  'subcat3': {
+    'amount': 3,
+    'day': 19
+  },
+  'subcat4': {
+    'amount': 20,
+    'day': 15
+  },
+  'subcat5': {
+    'amount': 400000,
+    'day': last_day
+  }
+}
+expenses_in_db = {}
 
-cur.execute("SELECT date, subcategory FROM expenses WHERE category in {3} and date between '{0}-{1}-01' and '{0}-{1}-{2}'".format(year, month, last_day, categories))
-bills = cur.fetchall()
+base_sql = """
+  SELECT subcategory, date, amount
+  FROM expenses
+  WHERE category = '{3}'
+  AND subcategory in %s
+  AND date between '{0}-{1}-01' and '{0}-{1}-{2}'
+"""
 
-print('Bills for {0}-{1}:'.format(year, month))
-print(bills)
+for category in categories:
+  sql = base_sql.format(year, str(month).zfill(2), str(last_day).zfill(2), category)
+  cur.execute(sql, (categories[category],))
+  for row in cur:
+    expenses_in_db[row[0]] = row
+  for subcat in categories[category]:
+    if subcat in expenses_in_db:
+      continue
+    insert = raw_input('Would you like to insert for {0}?'.format(subcat))
+    if insert.lower() in ('y', 'yes'):
+      cur.execute("INSERT INTO expenses (date, amount, category, subcategory) VALUES ('{}-{}-{}', {}, '{}', '{}')".format(year, month, str(data[subcat]['day']).zfill(2), data[subcat]['amount'], category, subcat))
 
-cur.execute("INSERT INTO expenses (date, amount, category, subcategory) VALUES ('{}-{}-01', 725, 'bills', 'rent')".format(year, month))
+conn.commit()
+conn.close()
