@@ -1,0 +1,26 @@
+# This file is an example of how the data.yml should be structured.
+# Remove the `.example` in the filename extension, and modify below
+# to reflect your needs.
+
+# manipulate / update.py
+categories:
+  cat1:
+    - subcat1
+    - subcat2
+    - subcat3
+  cat2:
+    - subcat4
+  cat3:
+    - subcat5
+    - subcat6
+
+# amount: $ per transaction.
+# day: day of the month on which transaction occurs. (`last_day` for last day of month.)
+details:
+  subcat1:
+    amount: 12
+    day: 1
+  subcat2:
+    amount: 22
+    day: 15
+  # etc; there should be one entry for each subcategory listed in `categories` above.
