@@ -71,4 +71,3 @@ with open('data.yml', 'r') as stream:
   insert_recurring(categories, details, dates, cur)
 
   close_db(conn)
-sys.exit()
