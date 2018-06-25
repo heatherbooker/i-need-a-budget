@@ -2,7 +2,7 @@
 
 - Track cashflow
 - Ooh and ahh at charts of cashflow
-- Modify cashflow (code not required, just me brain)
+- Modify cashflow ~~(code not required, just me brain)~~ u can use code for dis now! :scream:
 
 Python + PSQL; Using the classic matplotlib with psycopg2.
 
@@ -32,5 +32,16 @@ $ python manipulate/create-db.py
 
 Analyze data:
 ```bash
-$ python category.py  # to see pie chart of expenses by category
+$ python analyze/category.py  # to see pie chart of expenses by category
+$ python analyze/pipeline.py  # to see pie chart of income v. expenses
+```
+
+Update recurring expenses:
+
+Step 1. Copy data.yml.example to data.yml and modify its contents.
+
+Step 2: (`--fo-real` to modify budget `budget` instead of `test_budget`)
+```bash
+$ python manipulate/update.py --fo-real
+
 ```
