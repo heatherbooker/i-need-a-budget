@@ -1,0 +1,8 @@
+.git
+
+# Python env
+ENV
+
+# Budget info
+data.yml
+budget_dump
