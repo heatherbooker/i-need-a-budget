@@ -45,3 +45,14 @@ Step 2: (`--fo-real` to modify budget `budget` instead of `test_budget`)
 $ python manipulate/update.py --fo-real
 
 ```
+
+OCR _Work in Progress_
+
+Requirements: tesseract installed locally
+
+- must use .png, not .jpg
+```
+python manipulate/ocr.py -i path/to/image.png
+```
+
+- press 0 to quit when image is showing??(or maybe press anything im not really sure)
