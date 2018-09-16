@@ -50,7 +50,11 @@ def insert_recurring(categories, details, dates, cur):
       insert = raw_input('Would you like to insert for {0}?'.format(subcat))
       if insert.lower() in ('y', 'yes'):
         print('Inserting for {0}'.format(subcat))
-        day = str(details[subcat]['day']).zfill(2)
+        raw_day = details[subcat]['day']
+        if raw_day == 'last_day':
+            day = last_day
+        else:
+            day = str(raw_day).zfill(2)
         amount = details[subcat]['amount']
         cur.execute("INSERT INTO expenses (date, amount, category, subcategory) VALUES ('{}-{}-{}', {}, '{}', '{}')".format(year, month, day, amount, category, subcat))
 

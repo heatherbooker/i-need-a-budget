@@ -23,4 +23,7 @@ details:
   subcat2:
     amount: 22
     day: 15
+  subcat3:
+    amount: 250
+    day: last_day
   # etc; there should be one entry for each subcategory listed in `categories` above.
