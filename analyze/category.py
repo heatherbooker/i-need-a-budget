@@ -3,22 +3,28 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
 import sys
+import argparse
 
-def omit(from_list):
-    if len(sys.argv) > 1 and sys.argv[1] == '--omit':
+def parse():
+    parser = argparse.ArgumentParser(description='analyze spending by category')
+    parser.add_argument('--omit', action='append', nargs='*', help='categories or subcategories to omit from analysis')
+    return parser.parse_args()
+
+def omit(from_list, args):
+    if args.omit:
         print('Omitting categories: {}.'.format(sys.argv[2:]))
         return tuple(set(from_list).difference(set(sys.argv[2:])))
     else:
         return from_list
 
-def get_data():
+def get_data(args):
     conn = psycopg2.connect('dbname=budget')
     cur = conn.cursor()
 
     cur.execute('SELECT DISTINCT category FROM expenses')
     categories = cur.fetchall()
     categories = map((lambda tupl: tupl[0]), categories)
-    categories = omit(categories)
+    categories = omit(categories, args)
 
     amounts = []
     for category in categories:
@@ -36,5 +42,6 @@ def show_me_the_money(categories, amounts):
     plt.axis('equal')
     plt.show()
 
-[categories, amounts] = get_data()
+args = parse()
+[categories, amounts] = get_data(args)
 show_me_the_money(categories, amounts)
