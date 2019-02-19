@@ -7,13 +7,18 @@ import argparse
 
 def parse():
     parser = argparse.ArgumentParser(description='analyze spending by category')
-    parser.add_argument('--omit', action='append', nargs='*', help='categories or subcategories to omit from analysis')
+    exclusive = parser.add_mutually_exclusive_group()
+    exclusive.add_argument('--omit', action='append', nargs='*', help='categories or subcategories to omit from analysis')
+    exclusive.add_argument('--only', action='append', nargs='*', help='only analyze the specified categories or subcategories')
     return parser.parse_args()
 
 def omit(from_list, args):
     if args.omit:
-        print('Omitting categories: {}.'.format(sys.argv[2:]))
-        return tuple(set(from_list).difference(set(sys.argv[2:])))
+        print('Omitting categories: {}.'.format(args.omit[0]))
+        return tuple(set(from_list).difference(set(args.omit[0])))
+    elif args.only:
+        print('Only analyzing categories: {}.'.format(args.only[0]))
+        return tuple(set(from_list).intersection(set(args.only[0])))
     else:
         return from_list
 
@@ -42,6 +47,9 @@ def show_me_the_money(categories, amounts):
     plt.axis('equal')
     plt.show()
 
-args = parse()
-[categories, amounts] = get_data(args)
-show_me_the_money(categories, amounts)
+def gogogadget():
+    args = parse()
+    [categories, amounts] = get_data(args)
+    show_me_the_money(categories, amounts)
+
+gogogadget()
