@@ -1,4 +1,8 @@
+# Python virtualenv
 ENV
 
+# Config file for auto-insert
 data.yml
-budget_dump
+
+# pg_dump files
+*.dump
