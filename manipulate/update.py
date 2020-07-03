@@ -21,7 +21,6 @@ def connect_to_db():
   conn = psy.connect('dbname={}'.format(which_db))
   return conn
 
-
 def get_dates():
   year = date.today().year
 

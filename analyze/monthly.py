@@ -19,7 +19,6 @@ def get_df(args):
         return pd.read_sql("SELECT date, amount FROM expenses",
                     conn, parse_dates=['date'], index_col='date')
 
-
 args = parse()
 df = get_df(args)
 

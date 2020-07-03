@@ -1,6 +1,5 @@
 import psycopg2 as psy
 
-
 # Create db (must be in autocommit mode)
 conn = psy.connect(dbname='postgres')
 conn.autocommit = True
@@ -10,7 +9,6 @@ cur.execute('DROP DATABASE IF EXISTS test_budget')
 cur.execute('CREATE DATABASE test_budget')
 
 conn.close()
-
 
 # Create schema
 conn = psy.connect(dbname='test_budget')
@@ -26,7 +24,6 @@ CREATE TABLE IF NOT EXISTS {name} (
   details VARCHAR
 )
 """
-
 cur.execute(createtablesql.format(name='expenses'))
 cur.execute(createtablesql.format(name='income'))
 

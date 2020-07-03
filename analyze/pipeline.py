@@ -14,7 +14,6 @@ income = cur.fetchone()[0]
 
 conn.close()
 
-
 # SHOW ME THE MONEY (lol u so funny)
 slices = 2
 colors = cm.tab20b(np.linspace(0, 1, slices))
