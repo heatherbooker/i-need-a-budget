@@ -20,6 +20,9 @@ details:
   subcat1:
     amount: 12
     day: 1
+  subcat1:
+    amount: 120
+    day: 7
   subcat2:
     amount: 22
     day: 15
