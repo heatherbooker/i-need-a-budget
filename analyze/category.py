@@ -47,9 +47,9 @@ def show_me_the_money(categories, amounts):
     plt.axis('equal')
     plt.show()
 
-def gogogadget():
+def gogogadgetbuget():
     args = parse()
     [categories, amounts] = get_data(args)
     show_me_the_money(categories, amounts)
 
-gogogadget()
+gogogadgetbuget()
